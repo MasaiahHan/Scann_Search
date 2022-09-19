@@ -1,27 +1,80 @@
 import numpy as np
-
+import clip
+import torch
+#import scann
 
 
 
 def find(index):
+    '''
+    :param index: int
+    :return: a list with tuple(index, url)
+    '''
     url = np.load("./result/url.npy")
     list_save =np.load('./result/list_sav.npy')
+    text = np.load('./result/text.npy')
     target_index = list_save[index]
     output = []
     for j in range(len(target_index)):
-        output.append((target_index[j],url[target_index[j]]))
+        output.append((target_index[j],url[target_index[j]], text[target_index[j]]))
     return output
 
 
 def randomsamp(num):
+    '''
+    :param num: int , number of pictures you want to sample in the page
+    :return: a list with tuple(index, url)
+    '''
     url = np.load("./result/url.npy")
     randindex = np.random.randint(0,len(url),num)
     result = []
     for i in range(len(randindex)):
-        tup = (randindex[i],url[i])
+        tup = (randindex[i],url[randindex[i]])
         result.append(tup)
     return result
 
 
-#print(randomsamp(4))
-print(find(2))
+
+def scann_text(input_text, searcher, model, device):
+    # here we need to obtain the input string and convert it through clip model,
+    # let's say we have the embedding input string as " embd_input_text " with
+    # size 1 x embed_dimension
+    # start = time.time()
+    token_text = clip.tokenize(input_text).to(device)
+    with torch.no_grad():
+        embd_text1 = model.encode_text(token_text)
+    embd_text = embd_text1.cpu().numpy()
+    neighbors_text, distances_text = searcher.search_batched(
+        embd_text)  # neighbors is the tuple with size 1 x nearest neighbor
+
+    return neighbors_text[0]
+
+
+# def text_find(input_text):
+#     '''
+#     :param input_text:  a string users input
+#     :return:  a list with tuple(index, url)
+#     '''
+#     device = "cuda" if torch.cuda.is_available() else "cpu"
+#     model, preprocess = clip.load("ViT-B/32", device=device)
+#     text_features = np.load("./result/text_features.npy")
+#     url = np.load("./result/url.npy")
+#     # scann_txt
+#     searcher_txt = scann.scann_ops_pybind.builder(text_features, 10, "dot_product").tree(
+#         num_leaves=2000, num_leaves_to_search=100, training_sample_size=250000).score_ah(
+#         2, anisotropic_quantization_threshold=0.2).reorder(100).build()
+#
+#     neighbors_txt = scann_text(
+#         input_text=input_text,
+#         searcher=searcher_txt, model=model, device=device)
+#
+#     output = []
+#     for j in range(len(neighbors_txt)):
+#         output.append((neighbors_txt[j], url[neighbors_txt[j]]))
+#     return output
+
+
+print(find(14166))
+#print(randomsamp(20))
+
+#aa  = np.load("./result/url.npy")

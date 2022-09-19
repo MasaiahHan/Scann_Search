@@ -6,6 +6,7 @@ import PIL.Image as Image
 from io import BytesIO
 import cv2
 import numpy as np
+
 def download_image(url, our_dir):
     '''
     根据url下载图片
@@ -40,6 +41,8 @@ def download_image(url, our_dir):
         return None
     print("download image failed:{}".format(url))
     return None
+
+
 def download_image_thread(url_list, our_dir, num_processes, remove_bad=False, Async=True):
     '''
     多线程下载图片
@@ -74,3 +77,72 @@ def download_image_thread(url_list, our_dir, num_processes, remove_bad=False, As
     if remove_bad:
         image_list = [i for i in image_list if i is not None]
     return thread_list
+
+
+def load_data_new(url):
+    data = []
+    f = open(url, 'r+', encoding='utf-8')
+
+    a = 1
+    while a < 200000000000000:
+        line = f.readline()
+        line = line.rstrip('\n')
+        data.append(line)
+        if not line:
+            break
+
+    f.close()
+
+    f.close()
+    data_clean1 = []
+    for i in data:
+        if len(i) > 230:
+            data_clean1.append(i)
+
+    data_clean = []
+    for i in data_clean1:
+        if i[0] != '!':
+            data_clean.append(i)
+    return data_clean
+
+
+# def file_put_contents(fileName,content,modeName =''):
+#
+#     if(modeName == 'pappend'):
+#       mode = "r+";
+#     elif(modeName == 'append'):
+#      mode = "a+";
+#     elif(modeName == 'wb+'):
+#      mode = "wb+";
+#     else:
+#      mode = "w+";
+#
+#     # fileObject = open(fileName,mode);
+#     # fileObject.write(content);
+#     # fileObject.close();
+#     content1 = np.asarray(bytearray(content), dtype="uint8")
+#     image = cv2.imdecode(content1, cv2.IMREAD_COLOR)
+#     #cv2.imwrite(filename +".jpeg", image, [cv2.IMWRITE_JPEG_QUALITY, 80])
+#     cv2.imwrite(fileName, image, [cv2.IMWRITE_WEBP_QUALITY, 85])
+#
+# def downImg(url):
+#     saveDir = "./images/"
+#     #url = url[0];
+#     try:
+#         requests.adapters.DEFAULT_RETRIES = 5
+#         s = requests.session()
+#         s.keep_alive = False
+#         ir = s.get(url)
+#         if ir.status_code == 200:
+#             # wb+  保存二进制
+#             fileName = os.path.basename(url)[:-4] +'.webp';
+#             file_put_contents(saveDir+fileName,ir.content,"wb+");
+#
+#     except Exception as e:
+#         print(e)
+#
+# data = load_data_new('./ImageLinksFinal.txt')
+# pool = ThreadPool(4) # Sets the pool size to 4
+# results = pool.map(downImg,data);
+# pool.close();
+# pool.join();
