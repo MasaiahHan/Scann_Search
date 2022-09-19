@@ -57,26 +57,26 @@ def download_image_thread(url_list, our_dir, num_processes, remove_bad=False, As
     if not os.path.exists(our_dir):
         os.makedirs(our_dir)
     pool = ThreadPool(processes=num_processes)
-    thread_list = []
+    #thread_list = []
     for image_url in url_list:
         if Async:
             out = pool.apply_async(func=download_image, args=(image_url, our_dir))  # 异步
         else:
             out = pool.apply(func=download_image, args=(image_url, our_dir))  # 同步
-        thread_list.append(out)
+        #thread_list.append(out)
     pool.close()
     pool.join()
     #获取输出结果
-    image_list = []
-    if Async:
-        for p in thread_list:
-            image = p.get()  # get会阻塞
-            image_list.append(image)
-    else:
-        image_list = thread_list
-    if remove_bad:
-        image_list = [i for i in image_list if i is not None]
-    return thread_list
+    # image_list = []
+    # if Async:
+    #     for p in thread_list:
+    #         image = p.get()  # get会阻塞
+    #         image_list.append(image)
+    # else:
+    #     image_list = thread_list
+    # if remove_bad:
+    #     image_list = [i for i in image_list if i is not None]
+    return None
 
 
 def load_data_new(url):
