@@ -117,6 +117,7 @@ if __name__ == '__main__':
     np.save("./result/text.npy", text)
     np.save("./result/text_model.npy", text_model)
     np.save("./result/text_features.npy", text_features)
+    np.save("./result/img_features.npy", image_features)
 
     # scann_img
     searcher = scann.scann_ops_pybind.builder(image_features, 10, "dot_product").tree(
