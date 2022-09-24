@@ -16,7 +16,7 @@ def find(index):
     target_index = list_save[index]
     output = []
     for j in range(len(target_index)):
-        output.append((target_index[j],url[target_index[j]], text[target_index[j]]))
+        output.append((target_index[j],"https://iartai.com/destfolder/webp/image/"+url[target_index[j]]+".webp", text[target_index[j]]))
     return output
 
 
@@ -29,7 +29,7 @@ def randomsamp(num):
     randindex = np.random.randint(0,len(url),num)
     result = []
     for i in range(len(randindex)):
-        tup = (randindex[i],url[randindex[i]])
+        tup = (randindex[i],"https://iartai.com/destfolder/webp/image/"+url[randindex[i]]+".webp")
         result.append(tup)
     return result
 
@@ -70,7 +70,7 @@ def text_find(input_text):
 
     output = []
     for j in range(len(neighbors_txt)):
-        output.append((neighbors_txt[j], url[neighbors_txt[j]]))
+        output.append((neighbors_txt[j], "https://iartai.com/destfolder/webp/image/"+url[neighbors_txt[j]]+".webp"))
     return output
 
 
@@ -112,7 +112,7 @@ def load_image_find(input_pil_img):
 
     output = []
     for j in range(len(neighbors_txt)):
-        output.append((neighbors_txt[j], url[neighbors_txt[j]]))
+        output.append((neighbors_txt[j], "https://iartai.com/destfolder/webp/image/"+url[neighbors_txt[j]]+".webp"))
     return output
 
 
